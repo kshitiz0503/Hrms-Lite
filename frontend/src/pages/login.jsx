@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "../styles/login.css";
 import { useDispatch } from "react-redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginSuccess } from "../store/authSlice";
+import { setAccessToken } from "../store/authSlice";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,13 +32,13 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await API.post("/api/login/", {
+      const res = await API.post("/api/login/", {
         username: form.username,
         password: form.password,
       });
-
+      console.log("Login response:", res);
       toast.success("Login successful!");
-      dispatch(loginSuccess());
+      dispatch(setAccessToken(res.data.access));
       navigate("/dashboard");
 
     } catch (err) {

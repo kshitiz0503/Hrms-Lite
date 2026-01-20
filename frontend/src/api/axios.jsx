@@ -1,28 +1,59 @@
 import axios from "axios";
-
-export function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  console.log("🔍 Retrieved cookie:", match ? match[2] : null);
-  if (match) return match[2];
-}
-
+import store from "../store/store";
 const API = axios.create({
   baseURL: "https://backend.hrm.hypertonic.co.in",
-  withCredentials: true,
+//   baseURL: "http://127.0.0.1:8000",
+  withCredentials: true, // <-- refresh cookie ke liye
 });
 
-API.interceptors.request.use((config) => {
-  const csrfToken = getCookie("csrftoken");
-  console.log("⚠️ CSRF inside interceptor:", csrfToken);
+// 🔹 Request Interceptor (access token bhejne ke liye)
+API.interceptors.request.use(
+  (config) => {
+    const access = store.getState().auth.accessToken;
+    if (access) {
+      config.headers["Authorization"] = `Bearer ${access}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  if (csrfToken) {
-    config.headers["X-CSRFToken"] = csrfToken;
-    console.log("➡️ Axios header sent:", config.headers);
-  } else {
-    console.warn("❌ No CSRF token found!");
+// 🔹 Response Interceptor (401 aaya to refresh try karega)
+API.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    const original = err.config;
+
+    // agar access token expire -> auto refresh
+    if (err.response?.status === 401 && !original._retry) {
+      original._retry = true;
+      try {
+        const refreshRes = await axios.post(
+        //   "http://127.0.0.1:8000/api/refresh/",
+          "https://backend.hrm.hypertonic.co.in/",
+          {},
+          { withCredentials: true }
+        );
+
+        const newAccess = refreshRes.data.access;
+
+        // Store me update
+        store.dispatch({
+          type: "auth/setAccessToken",
+          payload: newAccess,
+        });
+
+        // retry request
+        original.headers["Authorization"] = `Bearer ${newAccess}`;
+        return API(original);
+
+      } catch (refreshError) {
+        store.dispatch({ type: "auth/logout" });
+      }
+    }
+
+    return Promise.reject(err);
   }
-
-  return config;
-});
+);
 
 export default API;

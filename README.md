@@ -100,13 +100,9 @@ http://localhost:5173
 
 ## 🔐 Authentication & Cookies
 
-- Backend uses **Django session authentication**
+- Backend uses Authorization: Bearer <access_token>
 - Frontend uses:
   - `axios.withCredentials = true`
-  - `X-CSRFToken` header via cookie
-- Cookies:
-  - `sessionid`
-  - `csrftoken`
 
 ---
 
@@ -115,8 +111,8 @@ http://localhost:5173
 If using subdomains (recommended):
 
 ```
-FE: https://hrm.mydomain.com
-BE: https://api.hrm.mydomain.com
+FE: https://hrm.hypertonic.co.in
+BE: https://backend.hrm.hypertonic.co.in
 ```
 
 Important Django settings in production:
@@ -128,6 +124,7 @@ SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 CORS_ALLOW_CREDENTIALS = True
 ```
+
 
 ---
 

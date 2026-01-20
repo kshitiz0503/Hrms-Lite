@@ -1,33 +1,55 @@
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.contrib.auth import authenticate, login, logout
-from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
-    authentication_classes = []
-    permission_classes = []
-
     def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
+        user = authenticate(
+            username=request.data.get("username"),
+            password=request.data.get("password")
+        )
 
-        user = authenticate(username=username, password=password)
-
-        if not user:
+        if user is None:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        login(request, user)
-        return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+        refresh = RefreshToken.for_user(user)
+
+        response = Response({
+            "access": str(refresh.access_token),
+            "user": user.username
+        })
+
+        # set refresh token in cookie
+        response.set_cookie(
+            key="refresh",
+            value=str(refresh),
+            httponly=True,
+            secure=False,  # True on production
+            samesite='None'
+        )
+
+        return response
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class LogoutView(APIView):
-    authentication_classes = []
-    permission_classes = []
-    
+class RefreshTokenView(APIView):
     def post(self, request):
-        logout(request)
-        return Response({"message": "Logged out"}, status=status.HTTP_200_OK)
+        refresh_token = request.COOKIES.get("refresh")
+
+        if refresh_token is None:
+            return Response({"error": "Refresh token missing"}, status=400)
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            access = refresh.access_token
+            return Response({"access": str(access)})
+        except:
+            return Response({"error": "Invalid refresh token"}, status=401)
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        response = Response({"message": "Logged out"})
+        response.delete_cookie("refresh")
+        return response
