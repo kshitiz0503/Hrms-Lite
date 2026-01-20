@@ -12,7 +12,7 @@ venv/
 
 staticfiles/
 media/
-
+backend.zip
 # Database
 *.sql
 db.sqlite3
@@ -24,6 +24,7 @@ dist/
 dist-ssr/
 build/
 *.local
+dist.zip
 
 # Debug logs
 npm-debug.log*

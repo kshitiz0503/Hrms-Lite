@@ -113,9 +113,9 @@ WSGI_APPLICATION = 'hrms_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hypertonic_hrms_db',
-        'USER': 'hypertonic_hrms',
-        'PASSWORD': 'Kshitu0506@',
+        'NAME': 'hypertonic_tmp_hrm',
+        'USER': 'hypertonic_tmp_hrm',
+        'PASSWORD': 'hypertonic_tmp_hrm@123',
         'HOST': 'hypertonic.co.in',
         'PORT': '3306',
     }
