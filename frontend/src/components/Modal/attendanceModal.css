@@ -1,0 +1,16 @@
+#autocomplete-box {
+  max-height: 140px;
+  overflow-y: auto;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  background: white;
+}
+
+.autocomplete-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background: #F3F4F6;
+}

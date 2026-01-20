@@ -1,0 +1,16 @@
+#layout-container {
+  display: flex;
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+#layout-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#layout-content {
+  padding: 20px;
+  flex-grow: 1;
+}

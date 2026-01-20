@@ -1,0 +1,13 @@
+#table-card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+#table-header h5 {
+  font-weight: 600;
+}
+
+#pagination span {
+  align-self: center;
+}

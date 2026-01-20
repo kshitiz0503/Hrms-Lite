@@ -1,0 +1,21 @@
+#navbar {
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  justify-content: space-between;
+}
+
+.navbar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+#sidebar-toggle {
+  font-size: 22px;
+  background: transparent;
+  border: none;
+}
