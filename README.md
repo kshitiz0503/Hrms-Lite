@@ -8,8 +8,7 @@ It supports employee management and daily attendance tracking with authenticatio
 ##  Features
 
 ###  Authentication
-- Admin login (session-based auth)
-- Secure cookies (SameSite, CSRF)
+- Admin login (jwt)
 - Protected routes (React + Redux)
 - Logout support
 
