@@ -7,6 +7,7 @@ djangorestframework==3.16.1
 djongo==1.2.31
 dnspython==2.8.0
 gunicorn==23.0.0
+mysqlclient==2.2.7
 packaging==25.0
 psycopg2-binary==2.9.11
 pymongo==4.16.0

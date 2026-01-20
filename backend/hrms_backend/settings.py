@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -109,14 +112,17 @@ WSGI_APPLICATION = 'hrms_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hrms_db',
-        'USER': 'hrms_user',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hypertonic_hrms_db',
+        'USER': 'hypertonic_hrms',
         'PASSWORD': 'Kshitu0506@',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'hypertonic.co.in',
+        'PORT': '3306',
     }
 }
+
+
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
